@@ -46,7 +46,21 @@ class SignUp extends Component{
                 }
                 axios.post('/auth/createUser', data)
                     .then(res => {
-                        console.log(res)
+                        console.log('created...', res)
+                        if (res.status === 200) {
+                            if (res.data.code === 208){
+                                alert("User already exist with this email")
+                            } else if (res.data.code === 201) {
+                                history.push({
+                                    pathname: '/profile',
+                                    state: {username: self.state.username}
+                                });
+                                history.go('/profile');
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        alert(err)
                     })
             }
         }
@@ -72,7 +86,7 @@ class SignUp extends Component{
                             <div className="col-md-12">
                                     <label for="inp" className="inp">
                                         <input type="text" id="inp" name="username" onChange={self.handleChange} placeholder="&nbsp;"/>
-                                        <span className="mylabel">username</span>
+                                        <span className="mylabel">email</span>
                                         <span className="border"></span>
                                     </label>
                             </div>

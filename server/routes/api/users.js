@@ -11,23 +11,31 @@ const User = require('../../models/userModel');
 // @desc  create a user by signing up from this app
 router.post('/createUser', (req, res) => {
 
-    const saltRounds = 10;
-    bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
-        var newUser = new User({
-            username: req.body.username,
-            password: hash
-        });
-    
-        newUser.save()
-            .then(user => {
-                res.json({code: 200, message: "user created!", username: req.body.username})
-                console.log('user created!')
-            })
-            .catch(err => res.json(err))
-    });
+    User.find({ username: req.body.username })
+    .then(usr => {
+        if (!_.isEmpty(usr)){
+            res.json({code: 208, message: "User already exist with this email", email: req.body.username})
+        } else {
+            const saltRounds = 10;
+            bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+                var newUser = new User({
+                    username: req.body.username,
+                    password: hash
+                });
+            
+                newUser.save()
+                    .then(user => {
+                        res.json({code: 201, message: "user created!", username: req.body.username})
+                        console.log('user created!')
+                    })
+                    .catch(err => res.json(err))
+            });
+        }
+    })
+    .catch(err => res.json(err));
 })
 
-// @route POST to api/auth/login
+// @route POST to auth/login
 // @desc user exits or not
 router.post('/login', (req, res) => {
 
@@ -91,8 +99,21 @@ router.post('/social_sigin', (req, res) => {
 // @route GET auth/profile
 // @desc get profile data of logged in user
 router.post('/profile', (req, res) => {
-
-    User.find({ "social_signin.id": req.body.social_signin })
+    if (req.body.social_signin){
+        console.log('social ', req.body.social_signin)
+        User.find({ "social_signin.id": req.body.social_signin })
+            .then(user => {
+                let data = {
+                    name: user[0].name,
+                    image: user[0].profile_picture,
+                    username: user[0].username
+                }
+                res.json({code: 200, message: "data fetch successfully", profile_data: data})
+            })
+            .catch(err => res.json(err))
+    } else {
+        console.log('username ', req.body.username)
+        User.find({ "username": req.body.username })
         .then(user => {
             let data = {
                 name: user[0].name,
@@ -102,6 +123,7 @@ router.post('/profile', (req, res) => {
             res.json({code: 200, message: "data fetch successfully", profile_data: data})
         })
         .catch(err => res.json(err))
+    }
 })
 
 

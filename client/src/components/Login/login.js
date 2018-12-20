@@ -113,7 +113,10 @@ class Login extends Component{
             axios.post('/auth/login', data)
                 .then(res => {
                     if (res.data.code === 200){
-                        history.push('/profile');
+                        history.push({
+                            pathname: '/profile',
+                            state: {username: self.state.username}
+                        });
                         history.go('/profile');
                     } else {
                         alert('do not have account')
@@ -140,7 +143,7 @@ class Login extends Component{
                             <div className="col-md-12">
                                     <label htmlFor="inp" className="inp">
                                         <input type="text" id="inp" name="username" onChange={self.handleChange} placeholder="&nbsp;"/>
-                                        <span className="mylabel">username</span>
+                                        <span className="mylabel">email</span>
                                         <span className="border"></span>
                                     </label>
                             </div>
