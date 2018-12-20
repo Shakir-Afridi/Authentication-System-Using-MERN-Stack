@@ -8,3 +8,11 @@ export function storeSocialId(id) {
         })
     }
 }
+
+export function getSocialId(){
+    return dispatch => {
+        dispatch ({
+            type: 'GET_SOCIAL_ID'
+        })
+    }
+}

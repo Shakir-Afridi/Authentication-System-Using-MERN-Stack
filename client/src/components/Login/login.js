@@ -60,7 +60,7 @@ class Login extends Component{
     }
 
     componentDidMount(){
-        console.log('login...', this.props.social_id)
+        // console.log('login...', this.props.social_id)
     }
 
     handleChange(e){
@@ -80,14 +80,17 @@ class Login extends Component{
         axios.post("/auth/social_sigin", data)
             .then(res => {
                 if(res.status === 200){
-                    this.props.storeSocialId(res.data.data.social_signin.id)
+                    // this.props.storeSocialId(res.data.data.social_signin.id)
                     if (res.data.code === 208){
                         console.log(res.data)
                     } else {
                         console.log(res.data)
                     }
-                    // history.push('/profile');
-                    // history.go('/profile');
+                    history.push({
+                        pathname: '/profile',
+                        state: {id: res.data.data.social_signin.id}
+                    });
+                    history.go('/profile');
                 } else {
                     console.log(res)
                 }

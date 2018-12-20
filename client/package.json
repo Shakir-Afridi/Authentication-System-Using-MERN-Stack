@@ -8,6 +8,7 @@
     "express-session": "^1.15.6",
     "lodash": "^4.17.11",
     "react": "^16.6.3",
+    "react-bootstrap": "^0.32.4",
     "react-dom": "^16.6.3",
     "react-facebook-login": "^4.1.1",
     "react-github-login": "^1.0.3",

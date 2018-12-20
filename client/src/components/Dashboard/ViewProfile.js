@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { connect } from 'react-redux';
-import * as actions from '../../actions';
-
-// import profilePicture from '../../assets/images/profile.jpg';
+// import { connect } from 'react-redux';
+// import * as actions from '../../actions';
+import { withRouter } from "react-router";
+import {  
+    Navbar, Nav, NavItem, NavDropdown, MenuItem
+} from 'react-bootstrap';
 
 class ViewProfile extends Component {
     constructor(props){
@@ -16,62 +18,79 @@ class ViewProfile extends Component {
         }
     }
     componentDidMount(){
-        // console.log('profile...',  this.props.getSocialId())
         let data = {
-            social_signin: this.state.id
+            social_signin: this.props.location.state.id
         }
         console.log('id...', data)
-        // axios.post("/auth/profile", data)
-        //     .then(res => {
-        //         console.log(res.data)
-        //         this.setState({
-        //             name: res.data.profile_data.name,
-        //             username: res.data.profile_data.username,
-        //             profilePicture: res.data.profile_data.image
-        //         })
-        //     })
+        axios.post("/auth/profile", data)
+            .then(res => {
+                console.log(res.data)
+                this.setState({
+                    name: res.data.profile_data.name,
+                    username: res.data.profile_data.username,
+                    profilePicture: res.data.profile_data.image
+                })
+            })
     }
 
     render(){
 
         return (
-            <div>
-                <nav class="navbar navbar-inverse">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="#">WebSiteName</a>
+            // <Navbar inverse collapseOnSelect fluid fixedTop>
+            //     <Navbar.Header>
+            //         <Navbar.Brand>
+            //         <a href="#brand">React-Bootstrap</a>
+            //         </Navbar.Brand>
+            //         <Navbar.Toggle />
+            //     </Navbar.Header>
+            //     <Navbar.Collapse>
+            //         <Nav>
+            //         <NavItem eventKey={1} href="#">
+            //             Link
+            //         </NavItem>
+            //         <NavItem eventKey={2} href="#">
+            //             Link
+            //         </NavItem>
+            //         <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
+            //             <MenuItem eventKey={3.1}>Action</MenuItem>
+            //             <MenuItem eventKey={3.2}>Another action</MenuItem>
+            //             <MenuItem eventKey={3.3}>Something else here</MenuItem>
+            //             <MenuItem divider />
+            //             <MenuItem eventKey={3.3}>Separated link</MenuItem>
+            //         </NavDropdown>
+            //         </Nav>
+            //         <Nav pullRight>
+            //             <NavItem eventKey={1} href="#">
+            //                 <label>{this.state.name}</label>
+            //             </NavItem>
+            //             <NavItem eventKey={2} href="#">
+            //                 <img alt="" src={this.state.profilePicture} style={{ borderRadius: "50%", width: '30px', height: '30px'}} />
+            //             </NavItem>
+            //         </Nav>
+            //     </Navbar.Collapse>
+            // </Navbar>
+
+            <Navbar inverse collapseOnSelect fluid fixedTop>
+                <Navbar.Header>
+                <Navbar.Brand>
+                    <a href="#home">Brand</a>
+                </Navbar.Brand>
+                <Navbar.Toggle />
+                </Navbar.Header>
+                <Navbar.Collapse>
+                <Navbar.Text>
+                    Signed in as: <Navbar.Link href="#">{this.state.name}</Navbar.Link>
+                </Navbar.Text>
+                <Navbar.Text pullRight>
+                    <div>
+                        <a style={{marginRight: "15px", color: "#fff"}}>Profile</a>
+                        <img alt="" src={this.state.profilePicture} style={{ borderRadius: "50%", width: '30px', height: '30px', marginRight: "15px"}} />
                     </div>
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1 <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Page 1-1</a></li>
-                            <li><a href="#">Page 1-2</a></li>
-                            <li><a href="#">Page 1-3</a></li>
-                        </ul>
-                        </li>
-                        <li><a href="#">Page 2</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">{this.state.name}</a></li>
-                        <li><img alt="" src={this.state.profilePicture} style={{ marginTop: "5%", borderRadius: "50%", width: '40%', height: '40%'}} /></li>
-                    </ul>
-                </div>
-                </nav>
-                
-                <div class="container">
-                <h3>Right Aligned Navbar</h3>
-                <p>The .navbar-right class is used to right-align navigation bar buttons.</p>
-                </div>
-            </div>
+                </Navbar.Text>
+                </Navbar.Collapse>
+            </Navbar>
         )
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        social_id: state.socialIdReducer.socialId
-    }
-}
-
-export default connect(mapStateToProps, actions)(ViewProfile);
+export default withRouter(ViewProfile);

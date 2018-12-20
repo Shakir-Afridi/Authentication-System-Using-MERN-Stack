@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // components
-import EditProfile from './EditProfile';
+// import EditProfile from './EditProfile';
 import ViewProfile from './ViewProfile';
 
 class Profile extends Component {
